@@ -120,26 +120,30 @@ int joystick_buttons_map[10] = {
 };
 #else
 // button mapping for gp2x
-int joystick_buttons_map[18] =
+int joystick_buttons_map[] =
 {
-	SWITCH_UP,	// 0 (up)
-	SWITCH_UP,	// 1 (up-left)
-	SWITCH_LEFT,	// 2 (left)
-	SWITCH_DOWN,	// 3 (down-left)
-	SWITCH_DOWN,	// 4 (down)
-	SWITCH_DOWN,	// 5 (down-right)
-	SWITCH_RIGHT,	// 6 (right)
-	SWITCH_UP,	// 7 (up-right)
-	SWITCH_START1,	// 8 (start)
-	SWITCH_COIN1,	// 9 (select)
-	SWITCH_QUIT,	// 10 (left)
-	SWITCH_PAUSE,	// 11 (right)
-	SWITCH_BUTTON1,	// 12 (A)
-	SWITCH_BUTTON2, // 13 (B)
-	SWITCH_BUTTON3,	// 14 (X)
-	SWITCH_CONSOLE,	// 15 (Y)
-	SWITCH_BUTTON1, // 16 is vol +
-	SWITCH_BUTTON1 // 17 is vol -
+	SWITCH_UP,
+	SWITCH_LEFT,
+	SWITCH_DOWN,
+	SWITCH_RIGHT,
+	SWITCH_START1,
+	SWITCH_START2,
+	SWITCH_BUTTON1, 
+	SWITCH_BUTTON2,
+	SWITCH_BUTTON3,
+	SWITCH_COIN1,
+	SWITCH_COIN2,
+	SWITCH_SKILL1,
+	SWITCH_SKILL2, 
+	SWITCH_SKILL3,
+	SWITCH_SERVICE,
+	SWITCH_TEST,
+	SWITCH_RESET,
+	SWITCH_SCREENSHOT,
+	SWITCH_QUIT,
+	SWITCH_PAUSE,
+	SWITCH_CONSOL
+	SWITCH_TILT
 };
 #endif
 
