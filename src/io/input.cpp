@@ -214,6 +214,8 @@ void CFG_Keys()
 									val1 = atoi(sval1.c_str());
 									val2 = atoi(sval2.c_str());
 									val3 = atoi(sval3.c_str());
+									// fix the add 1 to keyboard mapping
+									if( strstr( sval3.c_str(), "-")) val3 =-abs(val3);
 									corrupt_file = false;	// looks like we're good
 
 									bool found_match = false;
@@ -226,7 +228,11 @@ void CFG_Keys()
 											g_key_defs[i][1] = val2;
 
 											// if zero then no mapping necessary, just use default, if any
-											if (val3 > 0) joystick_buttons_map[val3 - 1] = i;
+											if ( val3 >= 0  ) 
+											{
+												joystick_buttons_map[val3] = i;
+												printf("mapping joystick button:%d to %s\n",val3,g_key_names[i] );
+											}												
 											found_match = true;
 											break;
 										}
