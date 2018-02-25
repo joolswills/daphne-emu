@@ -103,7 +103,7 @@ int g_key_defs[SWITCH_COUNT][2] =
 
 
 
-#if defined(GP2X) 
+#if !defined(GP2X) 
 // added by Russ
 // global button mapping array. no defaults use button number on description
 // get the buttons to work with that function
@@ -130,11 +130,11 @@ int joystick_buttons_map[] =
 -1,	//	SWITCH_QUIT,
 -1,	//	SWITCH_PAUSE,
 -1,	//	SWITCH_CONSOL
--1,	//	SWITCH_TILT
+-1	//	SWITCH_TILT
 };
 #else
 // button mapping for gp2x
-int joystick_buttons_map[18] =
+int joystick_buttons_map[] =
 {
 0 , //KEY_UP
 0 , //KEY_LEFT
@@ -154,6 +154,10 @@ int joystick_buttons_map[18] =
 20 , //KEY_TEST
 6 , //KEY_RESET
 6 , //KEY_SCREENSHOT
+-1, //KEY_QUIT
+-1, //KEY_PAUSE 
+-1, //KEY_CONSOL
+-1 //KEY_TILT
 };
 #endif
 
@@ -234,11 +238,10 @@ void CFG_Keys()
 										// if we can match up a key name (see list above) ...
 										if (strcasecmp(key_name.c_str(), g_key_names[i])==0)
 										{
-											g_key_defs[i][0] = val1;
-											g_key_defs[i][1] = val2;
-											//joystick_buttons_map[i] = val3;
 											// if -1 then no mapping necessary, just use default, if any
-											if ( val3 >= -0  ) 
+											if ( val1 >= -0  ) g_key_defs[i][0] = val1;							
+											if ( val2 >= -0  ) g_key_defs[i][1] = val2;
+											if ( val3 >= -0  )  
 											{
 												joystick_buttons_map[i] = val3;
 												printf("mapping joystick button:%d to %s\n",val3,g_key_names[i] );
@@ -248,6 +251,7 @@ void CFG_Keys()
 												printf("using hard code button:%d to , %s \n",joystick_buttons_map[i] ,g_key_names[i]);
 											}
 											found_match = true;
+																						
 											break;
 										}
 									}
