@@ -230,10 +230,15 @@ void CFG_Keys()
 									val3 = atoi(sval3.c_str());
 									// fix the add 1 to keyboard mapping
 <<<<<<< HEAD
+<<<<<<< HEAD
 									if( strstr( sval1.c_str(), "-")) val3 =-abs(val1);							
 									if( strstr( sval2.c_str(), "-")) val3 =-abs(val2);
 =======
 >>>>>>> retropie
+=======
+									if( strstr( sval1.c_str(), "-")) val1 =-abs(val1);							
+									if( strstr( sval2.c_str(), "-")) val2 =-abs(val2);
+>>>>>>> testing
 									if( strstr( sval3.c_str(), "-")) val3 =-abs(val3);
 									corrupt_file = false;	// looks like we're good
 
