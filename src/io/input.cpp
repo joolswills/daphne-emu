@@ -213,9 +213,13 @@ void CFG_Keys()
 
 
 									// fix the add 1 to keyboard mapping
+<<<<<<< HEAD
 
 
 									if( strstr( sval1.c_str(), "-")) val1 =-abs(val1);							
+=======
+									if( strstr( sval1.c_str(), "-")) val1 =-abs(val1);
+>>>>>>> acf49609c77060f91259505727716f4d43900271
 									if( strstr( sval2.c_str(), "-")) val2 =-abs(val2);
 									if( strstr( sval3.c_str(), "-")) val3 =-abs(val3);
 
