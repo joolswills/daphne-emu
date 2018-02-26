@@ -103,7 +103,7 @@ int g_key_defs[SWITCH_COUNT][2] =
 
 ////////////
 
-#ifndef GP2X
+#if !defined(GP2X) && !defined(RPI)
 // added by Russ
 // global button mapping array. just hardcoded room for 10 buttons max
 int joystick_buttons_map[10] = {
@@ -210,6 +210,15 @@ void CFG_Keys()
 									val1 = atoi(sval1.c_str());
 									val2 = atoi(sval2.c_str());
 									val3 = atoi(sval3.c_str());
+
+
+									// fix the add 1 to keyboard mapping
+
+
+									if( strstr( sval1.c_str(), "-")) val1 =-abs(val1);
+									if( strstr( sval2.c_str(), "-")) val2 =-abs(val2);
+									if( strstr( sval3.c_str(), "-")) val3 =-abs(val3);
+
 									corrupt_file = false;	// looks like we're good
 
 									bool found_match = false;
