@@ -1161,9 +1161,8 @@ void astron::draw_sprite(int spr_number)
 
 		while (1)
 		{
-			int data_lo, data_high, data;
+		        int data_lo, data_high;
 
-			data = sprite[src2 & 0x7fff];
 			data_lo = sprite[src2 & 0x7fff];
 			data_high = sprite[(src2 & 0x7fff) + 0x8000];
 

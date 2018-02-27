@@ -236,12 +236,12 @@ unsigned int get_sys_mem()
 	unsigned int mem = 0;
 #ifdef LINUX
 	FILE *F;
-	int iRes = 0;
+	//	int iRes = 0;
 	const char *s = "ls -l /proc/kcore | awk '{print $5}'";
 	F = popen(s, "r");
 	if (F)
 	{
-		iRes = fscanf(F, "%u", &mem);	// this breaks if they have over 2 gigs of ram :)
+	  //		iRes = fscanf(F, "%u", &mem);	// this breaks if they have over 2 gigs of ram :)
 		pclose(F);
 	}
 
