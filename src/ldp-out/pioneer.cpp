@@ -274,12 +274,13 @@ void pioneer::stop()
 Uint16 pioneer::get_real_current_frame()
 {
 	char s[81] = { 0 };
-	bool gotframe = false;
+	//	bool gotframe = false;
 
 	serial_rxflush();
 	send_tx_string("?F");	// pioneer get frame
 
-	gotframe = getstring(s, 80, 3000, true);
+	//	gotframe = getstring(s, 80, 3000, true);
+	getstring(s, 80, 3000, true);
 	
 	return(static_cast<Uint16>(atoi(s)));
 }
@@ -415,7 +416,7 @@ void pioneer::printmodel()
 
 	char id[81] = { 0 };
 	char model[81] = { 0 };
-	char firmware[2] = { 0 };
+	char firmware[3] = { 0 };
 	bool gotid = false;
 	
 	send_tx_string("?X");	// query player for its type

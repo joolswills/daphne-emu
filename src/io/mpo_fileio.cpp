@@ -44,10 +44,13 @@ void mpo_test()
 {
 	if (sizeof(MPO_UINT64) != 8)	// make sure this is really 64-bit
 	{
+	  /*
 		int i = 0;
 		int b;
 		
 		b = 5 / i;	// force crash
+	  */
+	  exit(-1);
 	}
 }
 

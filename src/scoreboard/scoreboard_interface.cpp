@@ -1,4 +1,5 @@
 #include "scoreboard_interface.h"
+#include "../io/conout.h"
 
 void IScoreboard::PreDeleteInstance()
 {
@@ -21,7 +22,8 @@ IScoreboard::~IScoreboard()
 
 bool IScoreboard::Init()
 {
-	// m_bInitialized must be true for Clear to be able to work
+  printline("Normal Init");
+  // m_bInitialized must be true for Clear to be able to work
 	m_bInitialized = true;
 
 	// but if Clear fails, we won't consider ourselves initialized
@@ -179,6 +181,7 @@ bool IScoreboard::pre_get_digit(unsigned int &uValue, WhichDigit which)
 
 bool IScoreboard::Clear()
 {
+  printline("Clear");
 	bool bRes = true;
 	for (unsigned int u = 0; u < DIGIT_COUNT; u++)
 	{
@@ -187,6 +190,7 @@ bool IScoreboard::Clear()
 		{
 			bRes = false;
 			break;
+			printline("Set failed");
 		}
 	}
 
