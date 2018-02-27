@@ -103,45 +103,64 @@ int g_key_defs[SWITCH_COUNT][2] =
 
 ////////////
 
-#ifndef GP2X
+#if !defined(GP2X) 
 // added by Russ
-// global button mapping array. just hardcoded room for 10 buttons max
-int joystick_buttons_map[10] = {
-	SWITCH_BUTTON1,	// button 1
-	SWITCH_BUTTON2,	// button 2
-	SWITCH_BUTTON3,	// button 3
-	SWITCH_BUTTON1,	// button 4
-	SWITCH_COIN1,		// button 5
-	SWITCH_START1,		// button 6
-	SWITCH_BUTTON1,	// button 7
-	SWITCH_BUTTON1,	// button 8
-	SWITCH_BUTTON1,	// button 9
-	SWITCH_BUTTON1,	// button 10
+// global button mapping array. no defaults use button number on description
+// get the buttons to work with that function
+int joystick_buttons_map[] =
+{
+-1,	 // SWITCH_UP,
+-1,	 // SWITCH_LEFT,
+-1,	// SWITCH_DOWN,
+-1,	// SWITCH_RIGHT,
+-1,	// 	SWITCH_START1,
+-1,	//	SWITCH_START2,
+-1,	//	SWITCH_BUTTON1, 
+-1,	//	SWITCH_BUTTON2,
+-1,	//	SWITCH_BUTTON3,
+-1,	//	SWITCH_COIN1,
+-1,	//	SWITCH_COIN2,
+-1,	//	SWITCH_SKILL1,
+-1,	//	SWITCH_SKILL2, 
+-1,	//	SWITCH_SKILL3,
+-1,	//	SWITCH_SERVICE,
+-1,	//	SWITCH_TEST,
+-1,	//	SWITCH_RESET,
+-1,	//	SWITCH_SCREENSHOT,
+-1,	//	SWITCH_QUIT,
+-1,	//	SWITCH_PAUSE,
+-1,	//	SWITCH_CONSOL
+-1	//	SWITCH_TILT
 };
 #else
 // button mapping for gp2x
-int joystick_buttons_map[18] =
+int joystick_buttons_map[] =
 {
-	SWITCH_UP,	// 0 (up)
-	SWITCH_UP,	// 1 (up-left)
-	SWITCH_LEFT,	// 2 (left)
-	SWITCH_DOWN,	// 3 (down-left)
-	SWITCH_DOWN,	// 4 (down)
-	SWITCH_DOWN,	// 5 (down-right)
-	SWITCH_RIGHT,	// 6 (right)
-	SWITCH_UP,	// 7 (up-right)
-	SWITCH_START1,	// 8 (start)
-	SWITCH_COIN1,	// 9 (select)
-	SWITCH_QUIT,	// 10 (left)
-	SWITCH_PAUSE,	// 11 (right)
-	SWITCH_BUTTON1,	// 12 (A)
-	SWITCH_BUTTON2, // 13 (B)
-	SWITCH_BUTTON3,	// 14 (X)
-	SWITCH_CONSOLE,	// 15 (Y)
-	SWITCH_BUTTON1, // 16 is vol +
-	SWITCH_BUTTON1 // 17 is vol -
+0 , //KEY_UP
+0 , //KEY_LEFT
+1 , //KEY_DOWN
+2 , //KEY_RIGHT
+2 , //KEY_START1
+2 , //KEY_START2
+3 , //KEY_BUTTON1
+0 , //KEY_BUTTON2
+4 , //KEY_BUTTON3
+9 , //KEY_COIN1
+18 , //KEY_COIN2
+19 , //KEY_SKILL1
+6 , //KEY_SKILL2
+7 , //KEY_SKILL3
+8 , //KEY_SERVICE
+20 , //KEY_TEST
+6 , //KEY_RESET
+6 , //KEY_SCREENSHOT
+-1, //KEY_QUIT
+-1, //KEY_PAUSE 
+-1, //KEY_CONSOL
+-1 //KEY_TILT
 };
 #endif
+
 
 // Mouse button to key mappings
 // Added by ScottD for Singe
@@ -210,24 +229,36 @@ void CFG_Keys()
 									val1 = atoi(sval1.c_str());
 									val2 = atoi(sval2.c_str());
 									val3 = atoi(sval3.c_str());
+									// fix button offset add 1 to keyboard mapping
+									if( strstr( sval1.c_str(), "-")) val1 =-abs(val1);
+									if( strstr( sval2.c_str(), "-")) val2 =-abs(val2);
+									if( strstr( sval3.c_str(), "-")) val3 =-abs(val3);
 									corrupt_file = false;	// looks like we're good
 
 									bool found_match = false;
 									for (int i = 0; i < SWITCH_COUNT; i++)
 									{
 										// if we can match up a key name (see list above) ...
+								
 										if (strcasecmp(key_name.c_str(), g_key_names[i])==0)
 										{
-											g_key_defs[i][0] = val1;
-											g_key_defs[i][1] = val2;
-
-											// if zero then no mapping necessary, just use default, if any
-											if (val3 > 0) joystick_buttons_map[val3 - 1] = i;
+											// if -1 then no mapping necessary, just use default, if any
+											if ( val1 >= -0  ) g_key_defs[i][0] = val1;							
+											if ( val2 >= -0  ) g_key_defs[i][1] = val2;
+											if ( val3 >= -0  )  
+											{
+												joystick_buttons_map[val3] = i;
+												printf("mapping joystick button:%d to %s\n",val3,g_key_names[i] );
+											}												
+											else 
+											{
+												printf("using hard code button:%d to , %s \n",joystick_buttons_map[i] ,g_key_names[i]);
+											}
 											found_match = true;
+																						
 											break;
-										}
+										}	
 									}
-
 									// if the key line was unknown
 									if (!found_match)
 									{
@@ -534,29 +565,13 @@ void process_event(SDL_Event *event)
 			}
 			break;
 		case SDL_JOYBUTTONDOWN:
-			reset_idle(); // added by JFA for -idleexit
-
-			// added by Russ
-			// loop through buttons and look for a press
-			for (i = 0; i < (sizeof(joystick_buttons_map) / sizeof(int)); i++) {
-				if (event->jbutton.button == i) {
-					input_enable((Uint8) joystick_buttons_map[i]);
-					break;
-				}
-			}
-
+			//reset_idle(); 
+			if ( ( joystick_buttons_map[event->jbutton.button] >= 0 ) && ( joystick_buttons_map[event->jbutton.button]  < SWITCH_COUNT ) )
+			input_enable(joystick_buttons_map[event->jbutton.button]);
 			break;
 		case SDL_JOYBUTTONUP:
-			reset_idle(); // added by JFA for -idleexit
-
-			// added by Russ
-			for (i = 0; i < (sizeof(joystick_buttons_map) / sizeof(int)); i++) {
-				if (event->jbutton.button == i) {
-					input_disable((Uint8) joystick_buttons_map[i]);
-					break;
-				}
-			}
-
+			if ( ( joystick_buttons_map[event->jbutton.button] >= 0 ) && ( joystick_buttons_map[event->jbutton.button]  < SWITCH_COUNT ) )
+			input_disable(joystick_buttons_map[event->jbutton.button]);
 			break;
 		case SDL_MOUSEBUTTONDOWN:
 			// added by ScottD
@@ -672,7 +687,7 @@ void process_joystick_motion(SDL_Event *event)
 	} // end verticle axis
 
 	// horizontal axis
-	else
+	else if (event->jaxis.axis == 0)
 	{
 		// if they're moving right
 		if (event->jaxis.value > JOY_AXIS_MID)
