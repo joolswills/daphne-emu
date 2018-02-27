@@ -7,7 +7,7 @@
 
 OBJS = scoreboard_interface.o scoreboard_factory.o scoreboard_collection.o \
 	hw_scoreboard.o img_scoreboard.o null_scoreboard.o \
-	overlay_scoreboard.o
+	overlay_scoreboard.o usb_scoreboard.o
 
 .SUFFIXES:	.cpp
 

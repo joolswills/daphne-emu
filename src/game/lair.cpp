@@ -189,7 +189,7 @@ dle11::dle11()
 
 void dle11::patch_roms()
 {
-	bool passed_test = false;
+  	bool passed_test = false;
 
 	// NOW check to make sure the DLE readme file is present and unaltered
 	// Dave Hallock requested this check to make sure sites don't remove his readme file
@@ -232,6 +232,8 @@ dle2::dle2()
 	};
 
 	m_rom_list = roms;
+	m_cpumem[0x121b] = 0x00;
+	m_cpumem[0x1235] = 0x00;
 
 }
 
@@ -260,6 +262,12 @@ void dle2::set_version(int version)
 	else
 	{
 		printline("LAIR 2.x:  Unsupported -version paramter, ignoring...");
+	}
+
+	if (m_fastboot)
+	{
+		m_cpumem[0x121b] = 0x00;
+		m_cpumem[0x1235] = 0x00;
 	}
 }
 
@@ -809,18 +817,28 @@ bool lair::init()
 		// if video overlay is enabled, it means we're using an overlay scoreboard
 		if (m_game_uses_video_overlay)
 		{
+			printline("Using overlay");
 			ScoreboardCollection::AddType(pScoreboard, ScoreboardFactory::OVERLAY);
 		}
 		// else if we're not using VLDP, then display an image scoreboard
 		else if (!g_ldp->is_vldp())
 		{
+			printline("Using image");
 			ScoreboardCollection::AddType(pScoreboard, ScoreboardFactory::IMAGE);
 		}
 
 		// if user has also requested a hardware scoreboard, then enable that too
-		if (get_scoreboard() != 0)
+		if (get_scoreboard() == 1 )
 		{
+			printline("Adding parallel port scoreboard");
 			ScoreboardCollection::AddType(pScoreboard, ScoreboardFactory::HARDWARE);
+		}
+
+		// if user has also requested a hardware scoreboard, then enable that too
+		if (get_scoreboard() == 2 )
+		{
+			printline("Adding USB scoreboard");
+			ScoreboardCollection::AddType(pScoreboard, ScoreboardFactory::USB);
 		}
 
 		m_pScoreboard = pScoreboard;
