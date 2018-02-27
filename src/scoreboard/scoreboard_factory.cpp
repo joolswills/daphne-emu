@@ -1,5 +1,6 @@
 #include "scoreboard_factory.h"
 #include "hw_scoreboard.h"
+#include "usb_scoreboard.h"
 #include "null_scoreboard.h"
 #include "img_scoreboard.h"
 #include "overlay_scoreboard.h"
@@ -23,8 +24,11 @@ IScoreboard *ScoreboardFactory::GetInstance(ScoreboardType type, ILogger *pLogge
 	case OVERLAY:
 		pRes = OverlayScoreboard::GetInstance(pFuncGetActiveOverlay, bThayers);
 		break;
-	case HARDWARE:	// hardware scoreboard via parallel port
+	case HARDWARE:	// Hardware scoreboard via parallel port
 		pRes = HwScoreboard::GetInstance(uWhichPort, pLogger);
+		break;
+	case USB:	// Hardware scoreboard via USB
+	        pRes = USBScoreboard::GetInstance();
 		break;
 	}
 

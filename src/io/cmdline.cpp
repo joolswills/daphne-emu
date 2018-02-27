@@ -643,6 +643,7 @@ bool parse_cmd_line(int argc, char **argv)
 
 	//////////////////////////////////////////////////////////////////////////////////////
 
+	set_scoreboard(0);      // Now this is a bitmapped type, so set it to NONE to start
 	g_argc = argc;
 	g_argv = argv;
 	g_arg_index = 1;	// skip name of executable from command line
@@ -650,6 +651,7 @@ bool parse_cmd_line(int argc, char **argv)
 	// if game and ldp types are correct
 	if (parse_homedir() && parse_game_type() && parse_ldp_type())
 	{		 
+	  net_no_server_send();
   	  // while we have stuff left in the command line to parse
 	  for (;;)
 	  {
@@ -768,15 +770,17 @@ bool parse_cmd_line(int argc, char **argv)
 
 		// if they are paranoid and don't want data sent to the server
 		// (don't be paranoid, read the source code, nothing bad is going on)
-		else if (strcasecmp(s, "-noserversend")==0)
-		{
-			net_no_server_send();
-		}
+		// else if (strcasecmp(s, "-noserversend")==0)
+		// {    Turn this off to get rid of network dependencies
+		//	net_no_server_send();
+		// }
+
 		else if (strcasecmp(s, "-nosound")==0)
 		{
 			set_sound_enabled_status(false);
 			printline("Disabling sound...");
 		}
+		
 		else if (strcasecmp(s, "-sound_buffer")==0)
 		{
 			get_next_word(s, sizeof(s));
@@ -785,18 +789,21 @@ bool parse_cmd_line(int argc, char **argv)
 			sprintf(s, "Setting sound buffer size to %d", sbsize);
 			printline(s);
 		}
+		
 		else if (strcasecmp(s, "-volume_vldp")==0)
 		{
 			get_next_word(s, sizeof(s));
 			unsigned int uVolume = atoi(s);
 			set_soundchip_vldp_volume(uVolume);
 		}
+		
 		else if (strcasecmp(s, "-volume_nonvldp")==0)
 		{
 			get_next_word(s, sizeof(s));
 			unsigned int uVolume = atoi(s);
 			set_soundchip_nonvldp_volume(uVolume);
 		}
+		
 		else if (strcasecmp(s, "-nocrc")==0)
 		{
 			g_game->disable_crc();
@@ -805,9 +812,10 @@ bool parse_cmd_line(int argc, char **argv)
 
 		else if (strcasecmp(s, "-scoreboard")==0)
 		{
-			set_scoreboard(1);
+		        set_scoreboard(get_scoreboard() | 0x01);   // Bitmapped -- enable parallel port SB
 			printline("Enabling external scoreboard...");
 		}
+		
 		else if (strcasecmp(s, "-scoreport")==0)
 		{
 			get_next_word(s, sizeof(s));
@@ -816,6 +824,13 @@ bool parse_cmd_line(int argc, char **argv)
 			sprintf(s, "Setting scoreboard port to %x", u);
 			printline(s);
 		}
+		
+		else if (strcasecmp(s, "-usbsb")==0)
+	        {
+		        set_scoreboard(get_scoreboard() | 0x02);  // Bitmapped -- enable USB SB
+			printline("Enabling USB scoreboard...");
+		}
+
 		else if (strcasecmp(s, "-port")==0)
 		{
 			get_next_word(s, sizeof(s));
