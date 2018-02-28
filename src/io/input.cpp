@@ -243,9 +243,9 @@ void CFG_Keys()
 										if (strcasecmp(key_name.c_str(), g_key_names[i])==0)
 										{
 											// if -1 then no mapping necessary, just use default, if any
-											if ( val1 >= -0  ) g_key_defs[i][0] = val1;							
-											if ( val2 >= -0  ) g_key_defs[i][1] = val2;
-											if ( val3 >= -0  )  
+											if ( val1 >= 1  ) g_key_defs[i][0] = val1;							
+											if ( val2 >= 1  ) g_key_defs[i][1] = val2;
+											if ( val3 >= 1  )  
 											{
 												joystick_buttons_map[val3] = i;
 												printf("mapping joystick button:%d to %s\n",val3,g_key_names[i] );
