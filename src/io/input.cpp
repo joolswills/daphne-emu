@@ -247,7 +247,7 @@ void CFG_Keys()
 											if ( val2 >= 1  ) g_key_defs[i][1] = val2;
 											if ( val3 >= 1  )  
 											{
-												joystick_buttons_map[val3] = i;
+												joystick_buttons_map[val3 - 1] = i;
 												printf("mapping joystick button:%d to %s\n",val3,g_key_names[i] );
 											}												
 											else 
