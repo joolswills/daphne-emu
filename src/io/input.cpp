@@ -103,20 +103,23 @@ int g_key_defs[SWITCH_COUNT][2] =
 
 ////////////
 
-#if !defined(GP2X) && !defined(RPI)
+#if !defined(GP2X) && defined(RPI)
 // added by Russ
 // global button mapping array. just hardcoded room for 10 buttons max
+// not a fixed system dont initialize button functions unless its 
+// from dapinput.sh
+
 int joystick_buttons_map[10] = {
-	SWITCH_BUTTON1,	// button 1
-	SWITCH_BUTTON2,	// button 2
-	SWITCH_BUTTON3,	// button 3
-	SWITCH_BUTTON1,	// button 4
-	SWITCH_COIN1,		// button 5
-	SWITCH_START1,		// button 6
-	SWITCH_BUTTON1,	// button 7
-	SWITCH_BUTTON1,	// button 8
-	SWITCH_BUTTON1,	// button 9
-	SWITCH_BUTTON1,	// button 10
+	-1,	// button 1
+	-1,	// button 2
+	-1,	// button 3
+	-1,	// button 4
+	-1,	// button 5
+	-1,	// button 6
+	-1,	// button 7
+	-1,	// button 8
+	-1	// button 9
+	-1	// button 10
 };
 #else
 // button mapping for gp2x
@@ -672,7 +675,7 @@ void process_joystick_motion(SDL_Event *event)
 	} // end verticle axis
 
 	// horizontal axis
-	else
+	else if (event->jaxis.axis == 0)
 	{
 		// if they're moving right
 		if (event->jaxis.value > JOY_AXIS_MID)
