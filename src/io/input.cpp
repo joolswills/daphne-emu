@@ -166,10 +166,9 @@ void CFG_Keys()
 	string key_name = "", sval1 = "", sval2 = "", sval3 = "", eq_sign = "";
 	int val1 = 0, val2 = 0, val3 = 0;
 //	bool done = false;
-
 	// find where the dapinput ini file is (if the file doesn't exist, this string will be empty)
 	string strDapInput = g_homedir.find_file("dapinput.ini", true);
-
+int max_buttons = (int) (sizeof(joystick_buttons_map) / sizeof(int));
 	io = mpo_open(strDapInput.c_str(), MPO_OPEN_READONLY);
 	if (io)
 	{
@@ -225,7 +224,11 @@ void CFG_Keys()
 											g_key_defs[i][1] = val2;
 
 											// if zero then no mapping necessary, just use default, if any
-											if (val3 > 0) joystick_buttons_map[val3 - 1] = i;
+											if ( val3 -1  < max_buttons)
+											{
+												if (val3 > 0 ) joystick_buttons_map[val3 - 1] = i;
+											}
+											else printf("sorry we only support %d joystick buttons we could not map button %d please check your dapinput.ini\n",max_buttons, val3 - 1 );
 											found_match = true;
 											break;
 										}
